@@ -6,7 +6,7 @@
   <title>Victor Alvarez | Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #0a0a0f;
@@ -18,6 +18,8 @@
       --accent-soft: rgba(124, 108, 255, 0.15);
       --border: #2a2a38;
       --morph: rgba(124, 108, 255, 0.12);
+      --portal-blue: #3b82f6;
+      --portal-orange: #f97316;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -29,6 +31,10 @@
       color: var(--text);
       line-height: 1.6;
       overflow-x: hidden;
+    }
+
+    body.hide-cursor, body.hide-cursor * {
+      cursor: none !important;
     }
 
     body::before {
@@ -52,32 +58,23 @@
       transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
                   transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
     .reveal-delay-1 { transition-delay: 0.1s; }
     .reveal-delay-2 { transition-delay: 0.2s; }
     .reveal-delay-3 { transition-delay: 0.3s; }
     .reveal-delay-4 { transition-delay: 0.4s; }
 
-    /* Image specific slower slide */
     .img-reveal {
       opacity: 0;
       transform: translateY(60px);
       transition: opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1),
                   transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .img-reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .img-reveal.visible { opacity: 1; transform: translateY(0); }
 
-    /* ===== TYPING CURSOR ===== */
     .typing-cursor {
       display: inline-block;
-      width: 3px;
-      height: 1.05em;
+      width: 3px; height: 1.05em;
       background: var(--accent);
       margin-left: 3px;
       vertical-align: text-bottom;
@@ -90,7 +87,6 @@
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       background: rgba(10, 10, 15, 0.75);
       backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid transparent;
       transition: border-color 0.3s, background 0.3s;
     }
@@ -113,13 +109,13 @@
     }
     .nav-links a::after {
       content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1.5px;
-      background: var(--accent); transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      background: var(--accent); transition: width 0.3s;
     }
     .nav-links a:hover { color: var(--text); }
     .nav-links a:hover::after { width: 100%; }
 
     /* ===== HERO ===== */
-    .hero { padding: 160px 0 100px; text-align: center; }
+    .hero { padding: 160px 0 100px; text-align: center; position: relative; }
     .hero-badge {
       display: inline-block; padding: 6px 14px;
       background: var(--accent-soft); color: var(--accent);
@@ -140,34 +136,38 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
     .hero .subtitle {
-      font-size: 1.3rem; color: var(--text-muted); margin-bottom: 40px;
+      font-size: 1.3rem; color: var(--text-muted); margin-bottom: 48px;
       font-weight: 400; min-height: 1.6em;
     }
 
+    /* CTA + Portals */
     .hero-cta {
-      display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
-      position: relative;
+      display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;
+      position: relative; min-height: 56px;
     }
 
-    /* Buttons start off-screen */
     .btn {
       display: inline-flex; align-items: center; gap: 8px;
       padding: 14px 28px; border-radius: 980px;
       font-weight: 500; font-size: 0.95rem; text-decoration: none;
-      position: relative; z-index: 2;
+      position: relative; z-index: 5;
+      opacity: 0;
+      pointer-events: none;
       transition: transform 0.15s ease, background 0.3s, box-shadow 0.3s, border-color 0.3s;
     }
     .btn-primary {
       background: var(--accent); color: white;
-      transform: translateX(-120px); opacity: 0;
+      transform: translateX(-80px);
     }
     .btn-secondary {
       background: transparent; color: var(--text); border: 1px solid var(--border);
-      transform: translateX(120px); opacity: 0;
+      transform: translateX(80px);
     }
-    .btn-primary.popped, .btn-secondary.popped {
-      opacity: 1; transform: translateX(0);
-      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s;
+    .btn.visible {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s;
     }
     .btn-primary:hover {
       background: #6b5ce6; box-shadow: 0 8px 25px rgba(124, 108, 255, 0.35);
@@ -176,61 +176,146 @@
       background: var(--bg-card); border-color: #4a4a5a;
     }
 
-    /* Minecraft-style particles */
-    .particle {
+    /* Portals */
+    .portal {
       position: absolute;
-      width: 6px; height: 6px;
-      background: var(--accent);
-      border-radius: 1px;
-      pointer-events: none;
-      z-index: 1;
-      opacity: 0.9;
+      top: 50%;
+      width: 4px;
+      height: 0;
+      border-radius: 4px;
+      transform: translateY(-50%);
+      opacity: 0;
+      z-index: 3;
+      box-shadow: 0 0 20px currentColor, 0 0 40px currentColor;
+      transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s;
+    }
+    .portal.left {
+      left: calc(50% - 160px);
+      background: var(--portal-blue);
+      color: var(--portal-blue);
+    }
+    .portal.right {
+      right: calc(50% - 160px);
+      background: var(--portal-orange);
+      color: var(--portal-orange);
+    }
+    .portal.active {
+      height: 70px;
+      opacity: 1;
+    }
+    .portal.closing {
+      height: 0;
+      opacity: 0;
+      transition: height 0.4s, opacity 0.3s;
     }
 
-    /* ===== SECTIONS ===== */
+    /* Fake console */
+    #fake-console {
+      position: fixed;
+      bottom: 40px;
+      left: 40px;
+      width: 380px;
+      background: #0d0d12;
+      border: 1px solid #2a2a38;
+      border-radius: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: #a0a0b0;
+      z-index: 200;
+      opacity: 0;
+      transform: translateY(20px) scale(0.96);
+      pointer-events: none;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+    #fake-console.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #fake-console.hide {
+      opacity: 0;
+      transform: translateY(30px) scale(0.95);
+      transition: all 0.35s ease;
+    }
+    .console-header {
+      background: #16161f;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #2a2a38;
+    }
+    .console-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+    }
+    .console-dot.red { background: #ff5f57; }
+    .console-dot.yellow { background: #febc2e; }
+    .console-dot.green { background: #28c840; }
+    .console-title {
+      margin-left: 8px;
+      font-size: 12px;
+      color: #666;
+    }
+    .console-body {
+      padding: 14px 16px;
+      min-height: 70px;
+      line-height: 1.5;
+    }
+    .console-line {
+      margin-bottom: 4px;
+    }
+    .console-prompt {
+      color: #7c6cff;
+    }
+    .console-cmd {
+      color: #e8e8ed;
+    }
+    .console-cursor {
+      display: inline-block;
+      width: 7px; height: 14px;
+      background: #7c6cff;
+      vertical-align: middle;
+      margin-left: 2px;
+      animation: blink 0.6s step-end infinite;
+    }
+
+    /* ===== SECTIONS (kept short) ===== */
     section { padding: 80px 0; }
     .section-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.85rem; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.02em;
+      font-size: 1.85rem; font-weight: 600; margin-bottom: 8px;
     }
     .section-subtitle { color: var(--text-muted); margin-bottom: 40px; font-size: 1.05rem; }
 
-    /* ABOUT */
     .about-card {
       background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px;
       padding: 36px; display: flex; gap: 32px; align-items: center; flex-wrap: wrap;
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s;
+      transition: transform 0.4s, box-shadow 0.4s;
     }
     .about-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.25); }
     .about-flag {
-      width: 100px; height: auto; border-radius: 10px; flex-shrink: 0;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 100px; border-radius: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.35);
     }
-    .about-card:hover .about-flag { transform: scale(1.05) rotate(-2deg); }
     .about-text { flex: 1; min-width: 220px; }
     .about-text p { color: var(--text-muted); font-size: 1.08rem; margin-bottom: 16px; }
-    .about-text p:last-child { margin-bottom: 0; }
-    .about-text strong { color: var(--text); font-weight: 600; }
+    .about-text strong { color: var(--text); }
 
-    /* SKILLS */
     .skills-grid {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px;
     }
     .skill-item {
       background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px;
       padding: 22px 16px; text-align: center;
-      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.35s;
     }
     .skill-item:hover {
-      background: var(--bg-card-hover); border-color: var(--accent);
-      transform: translateY(-6px) scale(1.02);
+      border-color: var(--accent); transform: translateY(-6px);
       box-shadow: 0 12px 30px rgba(124, 108, 255, 0.15);
     }
-    .skill-item .name { font-weight: 600; font-size: 0.98rem; }
+    .skill-item .name { font-weight: 600; }
     .skill-item .note { font-size: 0.7rem; color: #666; margin-top: 5px; }
 
-    /* INTERESTS */
     .interests-grid {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 20px; perspective: 1000px;
@@ -238,83 +323,82 @@
     .interest-card {
       background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px;
       overflow: hidden; transition: box-shadow 0.4s, border-color 0.4s;
-      transform-style: preserve-3d; will-change: transform;
+      transform-style: preserve-3d;
     }
-    .interest-card:hover {
-      border-color: #3a3a4a; box-shadow: 0 25px 50px rgba(0,0,0,0.4);
-    }
+    .interest-card:hover { border-color: #3a3a4a; box-shadow: 0 25px 50px rgba(0,0,0,0.4); }
     .interest-card img {
       width: 100%; height: 170px; object-fit: cover; display: block;
-      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 0.5s;
     }
     .interest-card:hover img { transform: scale(1.06); }
-    .interest-card .content { padding: 20px 20px 22px; }
-    .interest-card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 6px; }
+    .interest-card .content { padding: 20px; }
+    .interest-card h3 { font-size: 1.1rem; margin-bottom: 6px; }
     .interest-card p { font-size: 0.9rem; color: var(--text-muted); }
 
-    /* GOALS */
     .goals-card {
       background: var(--bg-card); border: 1px solid rgba(124, 108, 255, 0.25);
       border-radius: 20px; overflow: hidden;
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s;
     }
-    .goals-card:hover { transform: translateY(-4px); box-shadow: 0 25px 50px rgba(124, 108, 255, 0.12); }
-    .goals-images { display: grid; grid-template-columns: 1fr 1fr; gap: 0; overflow: hidden; }
+    .goals-images { display: grid; grid-template-columns: 1fr 1fr; }
     .goals-images img {
       width: 100%; height: 190px; object-fit: cover; display: block;
-      transition: transform 0.1s linear; will-change: transform;
     }
     .goals-text { padding: 32px 36px; }
     .goals-text p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.7; }
     .goals-text strong { color: var(--text); }
 
-    /* LANGUAGES */
     .lang-list { display: flex; flex-wrap: wrap; gap: 12px; }
     .lang-tag {
       background: var(--bg-card); border: 1px solid var(--border); border-radius: 100px;
       padding: 10px 18px; font-size: 0.92rem; font-weight: 500;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .lang-tag:hover {
-      border-color: var(--accent); transform: translateY(-3px); background: var(--bg-card-hover);
     }
     .lang-tag.learning { border-style: dashed; color: var(--text-muted); }
 
-    /* CONTACT */
     .contact-links { display: flex; gap: 16px; flex-wrap: wrap; }
     .contact-link {
       display: flex; align-items: center; gap: 12px;
       background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px;
       padding: 18px 26px; text-decoration: none; color: var(--text); font-weight: 500;
-      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.35s;
     }
     .contact-link:hover {
-      background: var(--bg-card-hover); border-color: var(--accent);
-      transform: translateY(-5px) scale(1.03);
+      border-color: var(--accent); transform: translateY(-5px);
       box-shadow: 0 12px 30px rgba(124, 108, 255, 0.2);
     }
-    .contact-link svg { width: 22px; height: 22px; fill: currentColor; transition: transform 0.3s; }
-    .contact-link:hover svg { transform: scale(1.15); }
+    .contact-link svg { width: 22px; height: 22px; fill: currentColor; }
 
     footer {
       padding: 50px 0; text-align: center; border-top: 1px solid var(--border);
       color: var(--text-muted); font-size: 0.88rem;
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 700px) {
       .nav-links { display: none; }
       .hero { padding: 130px 0 70px; }
-      section { padding: 60px 0; }
-      .about-card { padding: 28px; flex-direction: column; text-align: center; }
+      .portal { display: none; }
+      .btn { opacity: 1; transform: none; pointer-events: auto; }
+      #fake-console { left: 16px; right: 16px; width: auto; }
       .goals-images { grid-template-columns: 1fr; }
-      .goals-images img { height: 160px; }
-      .goals-text { padding: 28px; }
-      .btn { padding: 12px 22px; }
-      .btn-primary, .btn-secondary { transform: none; opacity: 1; }
     }
   </style>
 </head>
 <body>
+
+  <!-- Fake console -->
+  <div id="fake-console">
+    <div class="console-header">
+      <div class="console-dot red"></div>
+      <div class="console-dot yellow"></div>
+      <div class="console-dot green"></div>
+      <span class="console-title">victor@portfolio ~</span>
+    </div>
+    <div class="console-body" id="console-body">
+      <div class="console-line">
+        <span class="console-prompt">$</span>
+        <span class="console-cmd" id="console-cmd"></span><span class="console-cursor" id="console-cursor"></span>
+      </div>
+    </div>
+  </div>
 
   <nav id="navbar">
     <div class="container">
@@ -332,13 +416,17 @@
   <header class="hero">
     <div class="container">
       <div class="hero-badge">Student · Web Dev · Future Astronomer</div>
-      <h1 id="hero-title">
+      <h1>
         <span id="typed-title"></span><span class="typing-cursor" id="title-cursor"></span>
       </h1>
       <p class="subtitle">
         <span id="typing-text"></span><span class="typing-cursor" id="sub-cursor" style="display:none"></span>
       </p>
+
       <div class="hero-cta" id="cta-container">
+        <div class="portal left" id="portal-left"></div>
+        <div class="portal right" id="portal-right"></div>
+
         <a href="#about" class="btn btn-primary magnetic" id="btn-left">About me</a>
         <a href="#contact" class="btn btn-secondary magnetic" id="btn-right">Get in touch</a>
       </div>
@@ -383,31 +471,19 @@
       <div class="interests-grid">
         <div class="interest-card reveal reveal-delay-1 tilt-card">
           <img src="images/IMG_0951.jpeg" alt="Anime" class="img-reveal">
-          <div class="content">
-            <h3>Anime</h3>
-            <p>Always got something playing or queued up. Current favorite: Don't Toy With Me, Miss Nagatoro.</p>
-          </div>
+          <div class="content"><h3>Anime</h3><p>Always got something playing or queued up. Current favorite: Don't Toy With Me, Miss Nagatoro.</p></div>
         </div>
         <div class="interest-card reveal reveal-delay-2 tilt-card">
           <img src="images/IMG_0950.jpeg" alt="Baseball" class="img-reveal">
-          <div class="content">
-            <h3>Baseball</h3>
-            <p>Love the game and the competition.</p>
-          </div>
+          <div class="content"><h3>Baseball</h3><p>Love the game and the competition.</p></div>
         </div>
         <div class="interest-card reveal reveal-delay-3 tilt-card">
           <img src="images/IMG_0949.jpeg" alt="Soccer" class="img-reveal">
-          <div class="content">
-            <h3>Soccer</h3>
-            <p>Another sport I enjoy a lot.</p>
-          </div>
+          <div class="content"><h3>Soccer</h3><p>Another sport I enjoy a lot.</p></div>
         </div>
         <div class="interest-card reveal reveal-delay-4 tilt-card">
-          <img src="images/IMG_0947.jpeg" alt="Beach / Florida" class="img-reveal">
-          <div class="content">
-            <h3>Home vibes</h3>
-            <p>Florida beaches and good weather energy.</p>
-          </div>
+          <img src="images/IMG_0947.jpeg" alt="Beach" class="img-reveal">
+          <div class="content"><h3>Home vibes</h3><p>Florida beaches and good weather energy.</p></div>
         </div>
       </div>
     </div>
@@ -418,9 +494,9 @@
       <h2 class="section-title reveal">Future goals</h2>
       <p class="section-subtitle reveal reveal-delay-1">Where I'm headed</p>
       <div class="goals-card reveal reveal-delay-2">
-        <div class="goals-images" id="parallax-images">
+        <div class="goals-images">
           <img src="images/IMG_0952.jpeg" alt="Nebula" class="parallax-img img-reveal" data-speed="0.15">
-          <img src="images/IMG_0953.jpeg" alt="Pillars of Creation" class="parallax-img img-reveal" data-speed="-0.1">
+          <img src="images/IMG_0953.jpeg" alt="Pillars" class="parallax-img img-reveal" data-speed="-0.1">
         </div>
         <div class="goals-text">
           <p>After I leave high school I want to study <strong>astronomy</strong>. The reason is that I love how big and maybe infinite the universe is. I want to learn how everything forms... and maybe someday become an <strong>astronaut</strong>.</p>
@@ -466,217 +542,196 @@
   </footer>
 
   <script>
-    // ========== 1. TITLE TYPING WITH TYPO ==========
+    // ========== TITLE TYPING ==========
     const titleEl = document.getElementById('typed-title');
     const titleCursor = document.getElementById('title-cursor');
 
-    const titleSequence = [
-      { text: "Hey, I'm Vict", delay: 65 },
-      { text: "Hey, I'm Victir", delay: 85 },
-      { text: "Hey, I'm Victi", delay: 45 },
-      { text: "Hey, I'm Vict", delay: 45 },
-      { text: "Hey, I'm Victor", delay: 70 },
-      { text: "Hey, I'm Victor Alvare", delay: 65 },
-      { text: "Hey, I'm Victor Alvarex", delay: 90 },
-      { text: "Hey, I'm Victor Alvare", delay: 50 },
-      { text: "Hey, I'm Victor Alvarez", delay: 70 }
+    const titleSeq = [
+      { t: "Hey, I'm Vict", d: 65 },
+      { t: "Hey, I'm Victir", d: 80 },
+      { t: "Hey, I'm Victi", d: 40 },
+      { t: "Hey, I'm Vict", d: 40 },
+      { t: "Hey, I'm Victor", d: 65 },
+      { t: "Hey, I'm Victor Alvare", d: 60 },
+      { t: "Hey, I'm Victor Alvarex", d: 85 },
+      { t: "Hey, I'm Victor Alvare", d: 45 },
+      { t: "Hey, I'm Victor Alvarez", d: 65 }
     ];
 
-    let tStep = 0, tCurrent = "";
-
+    let ts = 0, tc = "";
     function runTitle() {
-      if (tStep >= titleSequence.length) {
-        setTimeout(() => {
-          titleCursor.style.display = 'none';
-          startSubtitle();
-        }, 700);
+      if (ts >= titleSeq.length) {
+        setTimeout(() => { titleCursor.style.display = 'none'; startSub(); }, 600);
         return;
       }
-      const target = titleSequence[tStep].text;
-      const deleting = target.length < tCurrent.length;
-
-      if (deleting) {
-        tCurrent = tCurrent.slice(0, -1);
-        titleEl.innerHTML = formatTitle(tCurrent);
-        setTimeout(runTitle, titleSequence[tStep].delay);
-      } else if (tCurrent.length < target.length) {
-        tCurrent = target.slice(0, tCurrent.length + 1);
-        titleEl.innerHTML = formatTitle(tCurrent);
-        setTimeout(runTitle, titleSequence[tStep].delay);
+      const target = titleSeq[ts].t;
+      const del = target.length < tc.length;
+      if (del) {
+        tc = tc.slice(0, -1);
+        titleEl.innerHTML = fmt(tc);
+        setTimeout(runTitle, titleSeq[ts].d);
+      } else if (tc.length < target.length) {
+        tc = target.slice(0, tc.length + 1);
+        titleEl.innerHTML = fmt(tc);
+        setTimeout(runTitle, titleSeq[ts].d);
       } else {
-        tStep++;
-        setTimeout(runTitle, deleting ? 30 : 220);
+        ts++;
+        setTimeout(runTitle, del ? 25 : 200);
       }
     }
-
-    function formatTitle(str) {
-      if (str.includes("Victor Alvarez"))
-        return str.replace("Victor Alvarez", '<span class="gradient">Victor Alvarez</span>');
-      if (str.includes("Victor"))
-        return str.replace("Victor", '<span class="gradient">Victor</span>');
-      return str;
+    function fmt(s) {
+      if (s.includes("Victor Alvarez")) return s.replace("Victor Alvarez", '<span class="gradient">Victor Alvarez</span>');
+      if (s.includes("Victor")) return s.replace("Victor", '<span class="gradient">Victor</span>');
+      return s;
     }
+    setTimeout(runTitle, 400);
 
-    setTimeout(runTitle, 500);
+    // ========== SUBTITLE TYPING ==========
+    function startSub() {
+      const el = document.getElementById('typing-text');
+      const cur = document.getElementById('sub-cursor');
+      cur.style.display = 'inline-block';
 
-    // ========== 2. SUBTITLE TYPING WITH TYPO ==========
-    function startSubtitle() {
-      const subEl = document.getElementById('typing-text');
-      const subCursor = document.getElementById('sub-cursor');
-      subCursor.style.display = 'inline-block';
-
-      const subSequence = [
-        { text: "A chill guy who really loves coding (and the univer", delay: 38 },
-        { text: "A chill guy who really loves coding (and the universse", delay: 70 }, // typo
-        { text: "A chill guy who really loves coding (and the univers", delay: 40 },
-        { text: "A chill guy who really loves coding (and the univer", delay: 40 },
-        { text: "A chill guy who really loves coding (and the universe)", delay: 45 }
+      const seq = [
+        { t: "A chill guy who really loves coding (and the univer", d: 36 },
+        { t: "A chill guy who really loves coding (and the universse", d: 65 },
+        { t: "A chill guy who really loves coding (and the univers", d: 35 },
+        { t: "A chill guy who really loves coding (and the univer", d: 35 },
+        { t: "A chill guy who really loves coding (and the universe)", d: 40 }
       ];
-
-      let sStep = 0, sCurrent = "";
-
-      function runSub() {
-        if (sStep >= subSequence.length) {
-          setTimeout(() => {
-            subCursor.style.display = 'none';
-            popButtons();
-          }, 600);
+      let s = 0, c = "";
+      function run() {
+        if (s >= seq.length) {
+          setTimeout(() => { cur.style.display = 'none'; startConsole(); }, 500);
           return;
         }
-        const target = subSequence[sStep].text;
-        const deleting = target.length < sCurrent.length;
-
-        if (deleting) {
-          sCurrent = sCurrent.slice(0, -1);
-          subEl.textContent = sCurrent;
-          setTimeout(runSub, subSequence[sStep].delay);
-        } else if (sCurrent.length < target.length) {
-          sCurrent = target.slice(0, sCurrent.length + 1);
-          subEl.textContent = sCurrent;
-          setTimeout(runSub, subSequence[sStep].delay);
+        const target = seq[s].t;
+        const del = target.length < c.length;
+        if (del) {
+          c = c.slice(0, -1);
+          el.textContent = c;
+          setTimeout(run, seq[s].d);
+        } else if (c.length < target.length) {
+          c = target.slice(0, c.length + 1);
+          el.textContent = c;
+          setTimeout(run, seq[s].d);
         } else {
-          sStep++;
-          setTimeout(runSub, deleting ? 30 : 180);
+          s++;
+          setTimeout(run, del ? 25 : 160);
         }
       }
-      runSub();
+      run();
     }
 
-    // ========== 3. BUTTONS POP FROM SIDES + PARTICLES ==========
-    function popButtons() {
-      const left = document.getElementById('btn-left');
-      const right = document.getElementById('btn-right');
-      const container = document.getElementById('cta-container');
+    // ========== FAKE CONSOLE + PORTALS + BUTTONS ==========
+    function startConsole() {
+      document.body.classList.add('hide-cursor');
 
-      // Spawn Minecraft-like particles
-      function spawnParticles(side) {
-        for (let i = 0; i < 14; i++) {
-          const p = document.createElement('div');
-          p.className = 'particle';
-          const x = side === 'left' ? 30 : container.offsetWidth - 30;
-          const y = 20 + Math.random() * 20;
-          p.style.left = x + 'px';
-          p.style.top = y + 'px';
-          p.style.background = Math.random() > 0.5 ? '#7c6cff' : '#a78bfa';
-          container.appendChild(p);
+      const consoleEl = document.getElementById('fake-console');
+      const cmdEl = document.getElementById('console-cmd');
+      const cursorEl = document.getElementById('console-cursor');
 
-          const angle = (Math.random() - 0.5) * Math.PI;
-          const dist = 40 + Math.random() * 60;
-          const tx = Math.cos(angle) * dist * (side === 'left' ? 1 : -1);
-          const ty = Math.sin(angle) * dist - 20;
+      consoleEl.classList.add('show');
 
-          p.animate([
-            { transform: 'translate(0,0) scale(1)', opacity: 1 },
-            { transform: `translate(${tx}px, ${ty}px) scale(0)`, opacity: 0 }
-          ], {
-            duration: 600 + Math.random() * 400,
-            easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
-            fill: 'forwards'
-          });
+      const command = "spawn --portals blue,orange --buttons";
+      let i = 0;
 
-          setTimeout(() => p.remove(), 1000);
+      function typeCmd() {
+        if (i < command.length) {
+          cmdEl.textContent += command[i];
+          i++;
+          setTimeout(typeCmd, 45 + Math.random() * 30);
+        } else {
+          // Command finished → open portals
+          setTimeout(() => {
+            cursorEl.style.display = 'none';
+            openPortals();
+          }, 400);
         }
       }
-
-      setTimeout(() => {
-        left.classList.add('popped');
-        spawnParticles('left');
-      }, 100);
-
-      setTimeout(() => {
-        right.classList.add('popped');
-        spawnParticles('right');
-      }, 280);
+      setTimeout(typeCmd, 500);
     }
 
-    // ========== MAGNETIC BUTTONS ======
+    function openPortals() {
+      const left = document.getElementById('portal-left');
+      const right = document.getElementById('portal-right');
+
+      left.classList.add('active');
+      setTimeout(() => right.classList.add('active'), 150);
+
+      // After portals open → slide buttons out
+      setTimeout(() => {
+        document.getElementById('btn-left').classList.add('visible');
+        document.getElementById('btn-right').classList.add('visible');
+
+        // Close portals + kill console
+        setTimeout(() => {
+          left.classList.add('closing');
+          right.classList.add('closing');
+
+          const consoleEl = document.getElementById('fake-console');
+          consoleEl.classList.remove('show');
+          consoleEl.classList.add('hide');
+
+          setTimeout(() => {
+            document.body.classList.remove('hide-cursor');
+            consoleEl.style.display = 'none';
+          }, 400);
+        }, 900);
+      }, 500);
+    }
+
+    // ========== MAGNETIC + TILT + SCROLL ==========
     document.querySelectorAll('.magnetic').forEach(btn => {
       btn.addEventListener('mousemove', e => {
-        const rect = btn.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-        btn.style.transform = `translate(${x * 0.22}px, ${y * 0.22}px) scale(1.05)`;
+        const r = btn.getBoundingClientRect();
+        const x = e.clientX - r.left - r.width / 2;
+        const y = e.clientY - r.top - r.height / 2;
+        btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px) scale(1.05)`;
       });
-      btn.addEventListener('mouseleave', () => {
-        btn.style.transform = 'translate(0,0) scale(1)';
-      });
+      btn.addEventListener('mouseleave', () => btn.style.transform = '');
     });
 
-    // ========== 3D TILT ======
     document.querySelectorAll('.tilt-card').forEach(card => {
       card.addEventListener('mousemove', e => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -8;
-        const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 8;
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03,1.03,1.03)`;
+        const r = card.getBoundingClientRect();
+        const rx = ((e.clientY - r.top - r.height/2) / (r.height/2)) * -8;
+        const ry = ((e.clientX - r.left - r.width/2) / (r.width/2)) * 8;
+        card.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.03,1.03,1.03)`;
       });
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1,1,1)';
-      });
+      card.addEventListener('mouseleave', () => card.style.transform = '');
     });
 
-    // ========== SCROLL REVEALS (text + images) ======
     const reveals = document.querySelectorAll('.reveal, .img-reveal');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
-      });
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-    reveals.forEach(el => observer.observe(el));
+    reveals.forEach(el => obs.observe(el));
 
-    // ========== NAVBAR ======
     const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-      navbar.classList.toggle('scrolled', window.scrollY > 40);
-    });
+    window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 40));
 
-    // ========== PARALLAX ======
-    const parallaxImgs = document.querySelectorAll('.parallax-img');
-    const goalsSection = document.getElementById('goals');
+    // Parallax
+    const goals = document.getElementById('goals');
     window.addEventListener('scroll', () => {
-      const rect = goalsSection.getBoundingClientRect();
-      if (rect.top < window.innerHeight && rect.bottom > 0) {
-        const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
-        parallaxImgs.forEach(img => {
-          const speed = parseFloat(img.dataset.speed);
-          img.style.transform = `translateY(${(progress - 0.5) * speed * 120}px) scale(1.08)`;
+      const r = goals.getBoundingClientRect();
+      if (r.top < innerHeight && r.bottom > 0) {
+        const p = (innerHeight - r.top) / (innerHeight + r.height);
+        document.querySelectorAll('.parallax-img').forEach(img => {
+          const s = parseFloat(img.dataset.speed);
+          img.style.transform = `translateY(${(p - 0.5) * s * 120}px) scale(1.08)`;
         });
       }
     });
 
-    // ========== SECTION MORPH ======
-    const sections = document.querySelectorAll('section[data-morph]');
-    const morphObserver = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          document.documentElement.style.setProperty('--morph', entry.target.dataset.morph);
-        }
-      });
-    }, { threshold: 0.35 });
-    sections.forEach(sec => morphObserver.observe(sec));
+    // Section morph
+    document.querySelectorAll('section[data-morph]').forEach(sec => {
+      new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) document.documentElement.style.setProperty('--morph', e.target.dataset.morph);
+        });
+      }, { threshold: 0.35 }).observe(sec);
+    });
   </script>
-
 </body>
 </html>
