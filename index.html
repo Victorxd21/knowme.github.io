@@ -17,18 +17,10 @@
       --accent: #7c6cff;
       --accent-soft: rgba(124, 108, 255, 0.15);
       --border: #2a2a38;
-      --success: #4ade80;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
       font-family: 'Inter', system-ui, sans-serif;
@@ -38,14 +30,10 @@
       overflow-x: hidden;
     }
 
-    /* Background subtle gradient */
     body::before {
       content: '';
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0; width: 100%; height: 100%;
       background: 
         radial-gradient(ellipse 80% 50% at 20% -20%, rgba(124, 108, 255, 0.12), transparent),
         radial-gradient(ellipse 60% 40% at 80% 100%, rgba(124, 108, 255, 0.08), transparent);
@@ -59,25 +47,21 @@
       padding: 0 24px;
     }
 
-    /* ===== NAV ===== */
+    /* NAV */
     nav {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       z-index: 100;
-      background: rgba(10, 10, 15, 0.8);
+      background: rgba(10, 10, 15, 0.85);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
     }
-
     nav .container {
       display: flex;
       justify-content: space-between;
       align-items: center;
       height: 64px;
     }
-
     .logo {
       font-family: 'Space Grotesk', sans-serif;
       font-weight: 700;
@@ -85,17 +69,12 @@
       color: var(--text);
       text-decoration: none;
     }
-
-    .logo span {
-      color: var(--accent);
-    }
-
+    .logo span { color: var(--accent); }
     .nav-links {
       display: flex;
       gap: 28px;
       list-style: none;
     }
-
     .nav-links a {
       color: var(--text-muted);
       text-decoration: none;
@@ -103,17 +82,13 @@
       font-weight: 500;
       transition: color 0.2s;
     }
+    .nav-links a:hover { color: var(--text); }
 
-    .nav-links a:hover {
-      color: var(--text);
-    }
-
-    /* ===== HERO ===== */
+    /* HERO */
     .hero {
       padding: 140px 0 80px;
       text-align: center;
     }
-
     .hero-badge {
       display: inline-block;
       padding: 6px 14px;
@@ -125,7 +100,6 @@
       margin-bottom: 24px;
       border: 1px solid rgba(124, 108, 255, 0.3);
     }
-
     .hero h1 {
       font-family: 'Space Grotesk', sans-serif;
       font-size: clamp(2.5rem, 6vw, 3.8rem);
@@ -134,28 +108,23 @@
       margin-bottom: 12px;
       line-height: 1.1;
     }
-
     .hero h1 span {
       background: linear-gradient(135deg, #7c6cff, #a78bfa);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-
     .hero .subtitle {
       font-size: 1.25rem;
       color: var(--text-muted);
       margin-bottom: 32px;
-      font-weight: 400;
     }
-
     .hero-cta {
       display: flex;
       gap: 12px;
       justify-content: center;
       flex-wrap: wrap;
     }
-
     .btn {
       display: inline-flex;
       align-items: center;
@@ -167,33 +136,26 @@
       text-decoration: none;
       transition: all 0.2s;
     }
-
     .btn-primary {
       background: var(--accent);
       color: white;
     }
-
     .btn-primary:hover {
       background: #6b5ce6;
       transform: translateY(-1px);
     }
-
     .btn-secondary {
       background: var(--bg-card);
       color: var(--text);
       border: 1px solid var(--border);
     }
-
     .btn-secondary:hover {
       background: var(--bg-card-hover);
       border-color: #3a3a4a;
     }
 
-    /* ===== SECTIONS ===== */
-    section {
-      padding: 70px 0;
-    }
-
+    /* SECTIONS */
+    section { padding: 70px 0; }
     .section-title {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 1.75rem;
@@ -201,43 +163,45 @@
       margin-bottom: 8px;
       letter-spacing: -0.02em;
     }
-
     .section-subtitle {
       color: var(--text-muted);
       margin-bottom: 36px;
       font-size: 1rem;
     }
 
-    /* ===== ABOUT ===== */
+    /* ABOUT */
     .about-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 32px;
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      flex-wrap: wrap;
     }
-
-    .about-card p {
+    .about-flag {
+      width: 90px;
+      height: auto;
+      border-radius: 8px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .about-text { flex: 1; min-width: 220px; }
+    .about-text p {
       color: var(--text-muted);
       font-size: 1.05rem;
       margin-bottom: 16px;
     }
+    .about-text p:last-child { margin-bottom: 0; }
+    .about-text strong { color: var(--text); font-weight: 600; }
 
-    .about-card p:last-child {
-      margin-bottom: 0;
-    }
-
-    .about-card strong {
-      color: var(--text);
-      font-weight: 600;
-    }
-
-    /* ===== SKILLS ===== */
+    /* SKILLS */
     .skills-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 12px;
     }
-
     .skill-item {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -246,96 +210,84 @@
       text-align: center;
       transition: all 0.2s;
     }
-
     .skill-item:hover {
       background: var(--bg-card-hover);
       border-color: var(--accent);
       transform: translateY(-2px);
     }
+    .skill-item .name { font-weight: 600; font-size: 0.95rem; }
+    .skill-item .note { font-size: 0.7rem; color: #666; margin-top: 4px; }
 
-    .skill-item .name {
-      font-weight: 600;
-      font-size: 0.95rem;
-    }
-
-    .skill-item .note {
-      font-size: 0.7rem;
-      color: #666;
-      margin-top: 4px;
-    }
-
-    /* ===== INTERESTS ===== */
+    /* INTERESTS - with images */
     .interests-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
     }
-
     .interest-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 22px 18px;
-      transition: all 0.2s;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.25s;
     }
-
     .interest-card:hover {
-      background: var(--bg-card-hover);
+      transform: translateY(-4px);
       border-color: #3a3a4a;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
     }
-
-    .interest-card .emoji {
-      font-size: 1.6rem;
-      margin-bottom: 10px;
+    .interest-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      display: block;
     }
-
+    .interest-card .content {
+      padding: 18px 18px 20px;
+    }
     .interest-card h3 {
-      font-size: 1rem;
+      font-size: 1.05rem;
       font-weight: 600;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
-
     .interest-card p {
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       color: var(--text-muted);
     }
 
-    /* ===== GOALS ===== */
+    /* GOALS */
     .goals-card {
-      background: linear-gradient(145deg, #16162a, #12121a);
+      background: var(--bg-card);
       border: 1px solid rgba(124, 108, 255, 0.25);
       border-radius: 16px;
-      padding: 32px;
-      position: relative;
       overflow: hidden;
     }
-
-    .goals-card::before {
-      content: '🚀';
-      position: absolute;
-      right: 24px;
-      top: 24px;
-      font-size: 3rem;
-      opacity: 0.15;
+    .goals-images {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
     }
-
-    .goals-card p {
+    .goals-images img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+    }
+    .goals-text {
+      padding: 28px 32px;
+    }
+    .goals-text p {
       color: var(--text-muted);
       font-size: 1.05rem;
-      position: relative;
     }
+    .goals-text strong { color: var(--text); }
 
-    .goals-card strong {
-      color: var(--text);
-    }
-
-    /* ===== LANGUAGES ===== */
+    /* LANGUAGES */
     .lang-list {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
     }
-
     .lang-tag {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -344,19 +296,17 @@
       font-size: 0.9rem;
       font-weight: 500;
     }
-
     .lang-tag.learning {
       border-style: dashed;
       color: var(--text-muted);
     }
 
-    /* ===== CONTACT ===== */
+    /* CONTACT */
     .contact-links {
       display: flex;
       gap: 14px;
       flex-wrap: wrap;
     }
-
     .contact-link {
       display: flex;
       align-items: center;
@@ -370,20 +320,17 @@
       font-weight: 500;
       transition: all 0.2s;
     }
-
     .contact-link:hover {
       background: var(--bg-card-hover);
       border-color: var(--accent);
       transform: translateY(-2px);
     }
-
     .contact-link svg {
       width: 20px;
       height: 20px;
       fill: currentColor;
     }
 
-    /* ===== FOOTER ===== */
     footer {
       padding: 40px 0;
       text-align: center;
@@ -392,26 +339,19 @@
       font-size: 0.85rem;
     }
 
-    /* Responsive */
     @media (max-width: 640px) {
-      .nav-links {
-        display: none;
-      }
-      .hero {
-        padding: 120px 0 60px;
-      }
-      section {
-        padding: 50px 0;
-      }
-      .about-card, .goals-card {
-        padding: 24px;
-      }
+      .nav-links { display: none; }
+      .hero { padding: 120px 0 60px; }
+      section { padding: 50px 0; }
+      .about-card { padding: 24px; flex-direction: column; text-align: center; }
+      .goals-images { grid-template-columns: 1fr; }
+      .goals-images img { height: 150px; }
+      .goals-text { padding: 24px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
   <nav>
     <div class="container">
       <a href="#" class="logo">Victor<span>.</span></a>
@@ -425,7 +365,6 @@
     </div>
   </nav>
 
-  <!-- HERO -->
   <header class="hero">
     <div class="container">
       <div class="hero-badge">Student · Web Dev · Future Astronomer</div>
@@ -438,42 +377,35 @@
     </div>
   </header>
 
-  <!-- ABOUT -->
   <section id="about">
     <div class="container">
       <h2 class="section-title">About me</h2>
       <p class="section-subtitle">Just a quick intro</p>
       <div class="about-card">
-        <p>
-          I'm just a chill guy that <strong>REALLY</strong> loves coding stuff. 
-          I might use AI a little (or too much 😅) but I still love coding and I love learning about it.
-        </p>
-        <p>
-          Outside of code you'll find me watching anime, playing baseball, soccer, or grinding chess 
-          (currently <strong>1100 Elo</strong> — holy tuff right?).
-        </p>
+        <img src="images/cuba-flag.jpg" alt="Cuban flag" class="about-flag">
+        <div class="about-text">
+          <p>
+            I'm just a chill guy that <strong>REALLY</strong> loves coding stuff. 
+            I might use AI a little (or too much 😅) but I still love coding and I love learning about it.
+          </p>
+          <p>
+            Outside of code you'll find me watching anime, playing baseball, soccer, or grinding chess 
+            (currently <strong>1100 Elo</strong> — holy tuff right?).
+          </p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- SKILLS -->
   <section id="skills">
     <div class="container">
       <h2 class="section-title">Skills</h2>
       <p class="section-subtitle">What I'm working with</p>
       <div class="skills-grid">
-        <div class="skill-item">
-          <div class="name">Python</div>
-        </div>
-        <div class="skill-item">
-          <div class="name">JavaScript</div>
-        </div>
-        <div class="skill-item">
-          <div class="name">HTML</div>
-        </div>
-        <div class="skill-item">
-          <div class="name">CSS</div>
-        </div>
+        <div class="skill-item"><div class="name">Python</div></div>
+        <div class="skill-item"><div class="name">JavaScript</div></div>
+        <div class="skill-item"><div class="name">HTML</div></div>
+        <div class="skill-item"><div class="name">CSS</div></div>
         <div class="skill-item">
           <div class="name">Luau</div>
           <div class="note">you know... the Roblox one</div>
@@ -482,57 +414,68 @@
     </div>
   </section>
 
-  <!-- INTERESTS -->
   <section id="interests">
     <div class="container">
       <h2 class="section-title">Things I love</h2>
       <p class="section-subtitle">Outside of the keyboard</p>
       <div class="interests-grid">
+
         <div class="interest-card">
-          <div class="emoji">💻</div>
-          <h3>Coding</h3>
-          <p>My main obsession. Always learning something new.</p>
+          <img src="images/nagatoro1.jpg" alt="Anime">
+          <div class="content">
+            <h3>Anime</h3>
+            <p>Always got something playing or queued up. Current favorite: Don't Toy With Me, Miss Nagatoro.</p>
+          </div>
         </div>
+
         <div class="interest-card">
-          <div class="emoji">🎌</div>
-          <h3>Anime</h3>
-          <p>Always got something playing or queued up.</p>
+          <img src="images/baseball.jpg" alt="Baseball">
+          <div class="content">
+            <h3>Baseball</h3>
+            <p>Love the game and the competition.</p>
+          </div>
         </div>
+
         <div class="interest-card">
-          <div class="emoji">⚾</div>
-          <h3>Baseball</h3>
-          <p>Love the game and the competition.</p>
+          <img src="images/soccer.jpg" alt="Soccer">
+          <div class="content">
+            <h3>Soccer</h3>
+            <p>Another sport I enjoy a lot.</p>
+          </div>
         </div>
+
         <div class="interest-card">
-          <div class="emoji">⚽</div>
-          <h3>Soccer</h3>
-          <p>Another sport I enjoy a lot.</p>
+          <img src="images/beach.jpg" alt="Beach / Florida">
+          <div class="content">
+            <h3>Home vibes</h3>
+            <p>Florida beaches and good weather energy.</p>
+          </div>
         </div>
-        <div class="interest-card">
-          <div class="emoji">♟️</div>
-          <h3>Chess</h3>
-          <p>1100 Elo and climbing. Holy tuff.</p>
-        </div>
+
       </div>
     </div>
   </section>
 
-  <!-- GOALS -->
   <section id="goals">
     <div class="container">
       <h2 class="section-title">Future goals</h2>
       <p class="section-subtitle">Where I'm headed</p>
       <div class="goals-card">
-        <p>
-          After I leave high school I want to study <strong>astronomy</strong>. 
-          The reason is that I love how big and maybe infinite the universe is. 
-          I want to learn how everything forms... and maybe someday become an <strong>astronaut</strong>.
-        </p>
+        <div class="goals-images">
+          <img src="images/space1.jpg" alt="Nebula">
+          <img src="images/space2.jpg" alt="Pillars of Creation">
+        </div>
+        <div class="goals-text">
+          <p>
+            After I leave high school I want to study <strong>astronomy</strong>. 
+            The reason is that I love how big and maybe infinite the universe is. 
+            I want to learn how everything forms... and maybe someday become an <strong>astronaut</strong>.
+          </p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- LANGUAGES -->
   <section id="languages">
     <div class="container">
       <h2 class="section-title">Languages</h2>
@@ -546,7 +489,6 @@
     </div>
   </section>
 
-  <!-- CONTACT -->
   <section id="contact">
     <div class="container">
       <h2 class="section-title">Let's connect</h2>
