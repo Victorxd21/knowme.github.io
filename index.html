@@ -47,14 +47,53 @@
       padding: 0 24px;
     }
 
+    /* ===== ANIMATIONS (Apple-style) ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* Hero entrance */
+    .hero-badge, .hero h1, .hero .subtitle, .hero-cta {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: heroIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .hero h1 { animation-delay: 0.15s; }
+    .hero .subtitle { animation-delay: 0.3s; }
+    .hero-cta { animation-delay: 0.45s; }
+
+    @keyframes heroIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     /* NAV */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
-      background: rgba(10, 10, 15, 0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+      background: rgba(10, 10, 15, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    nav.scrolled {
+      border-bottom-color: var(--border);
+      background: rgba(10, 10, 15, 0.9);
     }
     nav .container {
       display: flex;
@@ -68,7 +107,9 @@
       font-size: 1.25rem;
       color: var(--text);
       text-decoration: none;
+      transition: opacity 0.2s;
     }
+    .logo:hover { opacity: 0.8; }
     .logo span { color: var(--accent); }
     .nav-links {
       display: flex;
@@ -80,13 +121,29 @@
       text-decoration: none;
       font-size: 0.9rem;
       font-weight: 500;
-      transition: color 0.2s;
+      transition: color 0.25s;
+      position: relative;
     }
-    .nav-links a:hover { color: var(--text); }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1.5px;
+      background: var(--accent);
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .nav-links a:hover {
+      color: var(--text);
+    }
+    .nav-links a:hover::after {
+      width: 100%;
+    }
 
     /* HERO */
     .hero {
-      padding: 140px 0 80px;
+      padding: 160px 0 100px;
       text-align: center;
     }
     .hero-badge {
@@ -102,10 +159,10 @@
     }
     .hero h1 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(2.5rem, 6vw, 3.8rem);
+      font-size: clamp(2.6rem, 6.5vw, 4rem);
       font-weight: 700;
       letter-spacing: -0.03em;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
       line-height: 1.1;
     }
     .hero h1 span {
@@ -115,13 +172,14 @@
       background-clip: text;
     }
     .hero .subtitle {
-      font-size: 1.25rem;
+      font-size: 1.3rem;
       color: var(--text-muted);
-      margin-bottom: 32px;
+      margin-bottom: 36px;
+      font-weight: 400;
     }
     .hero-cta {
       display: flex;
-      gap: 12px;
+      gap: 14px;
       justify-content: center;
       flex-wrap: wrap;
     }
@@ -129,12 +187,12 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 12px 24px;
-      border-radius: 10px;
+      padding: 14px 28px;
+      border-radius: 980px;
       font-weight: 500;
       font-size: 0.95rem;
       text-decoration: none;
-      transition: all 0.2s;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .btn-primary {
       background: var(--accent);
@@ -142,55 +200,66 @@
     }
     .btn-primary:hover {
       background: #6b5ce6;
-      transform: translateY(-1px);
+      transform: scale(1.04);
+      box-shadow: 0 8px 25px rgba(124, 108, 255, 0.35);
     }
     .btn-secondary {
-      background: var(--bg-card);
+      background: transparent;
       color: var(--text);
       border: 1px solid var(--border);
     }
     .btn-secondary:hover {
-      background: var(--bg-card-hover);
-      border-color: #3a3a4a;
+      background: var(--bg-card);
+      border-color: #4a4a5a;
+      transform: scale(1.03);
     }
 
     /* SECTIONS */
-    section { padding: 70px 0; }
+    section { padding: 80px 0; }
     .section-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.75rem;
+      font-size: 1.85rem;
       font-weight: 600;
       margin-bottom: 8px;
       letter-spacing: -0.02em;
     }
     .section-subtitle {
       color: var(--text-muted);
-      margin-bottom: 36px;
-      font-size: 1rem;
+      margin-bottom: 40px;
+      font-size: 1.05rem;
     }
 
     /* ABOUT */
     .about-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 32px;
+      border-radius: 20px;
+      padding: 36px;
       display: flex;
-      gap: 28px;
+      gap: 32px;
       align-items: center;
       flex-wrap: wrap;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s;
+    }
+    .about-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
     }
     .about-flag {
-      width: 90px;
+      width: 100px;
       height: auto;
-      border-radius: 8px;
+      border-radius: 10px;
       flex-shrink: 0;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .about-card:hover .about-flag {
+      transform: scale(1.05) rotate(-2deg);
     }
     .about-text { flex: 1; min-width: 220px; }
     .about-text p {
       color: var(--text-muted);
-      font-size: 1.05rem;
+      font-size: 1.08rem;
       margin-bottom: 16px;
     }
     .about-text p:last-child { margin-bottom: 0; }
@@ -200,58 +269,63 @@
     .skills-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 12px;
+      gap: 14px;
     }
     .skill-item {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 18px 16px;
+      border-radius: 14px;
+      padding: 22px 16px;
       text-align: center;
-      transition: all 0.2s;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .skill-item:hover {
       background: var(--bg-card-hover);
       border-color: var(--accent);
-      transform: translateY(-2px);
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 12px 30px rgba(124, 108, 255, 0.15);
     }
-    .skill-item .name { font-weight: 600; font-size: 0.95rem; }
-    .skill-item .note { font-size: 0.7rem; color: #666; margin-top: 4px; }
+    .skill-item .name { font-weight: 600; font-size: 0.98rem; }
+    .skill-item .note { font-size: 0.7rem; color: #666; margin-top: 5px; }
 
-    /* INTERESTS - with images */
+    /* INTERESTS */
     .interests-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 18px;
+      gap: 20px;
     }
     .interest-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: 18px;
       overflow: hidden;
-      transition: all 0.25s;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .interest-card:hover {
-      transform: translateY(-4px);
+      transform: translateY(-8px) scale(1.02);
       border-color: #3a3a4a;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.35);
     }
     .interest-card img {
       width: 100%;
-      height: 160px;
+      height: 170px;
       object-fit: cover;
       display: block;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .interest-card:hover img {
+      transform: scale(1.08);
     }
     .interest-card .content {
-      padding: 18px 18px 20px;
+      padding: 20px 20px 22px;
     }
     .interest-card h3 {
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       font-weight: 600;
       margin-bottom: 6px;
     }
     .interest-card p {
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       color: var(--text-muted);
     }
 
@@ -259,8 +333,13 @@
     .goals-card {
       background: var(--bg-card);
       border: 1px solid rgba(124, 108, 255, 0.25);
-      border-radius: 16px;
+      border-radius: 20px;
       overflow: hidden;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s;
+    }
+    .goals-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 25px 50px rgba(124, 108, 255, 0.12);
     }
     .goals-images {
       display: grid;
@@ -269,16 +348,21 @@
     }
     .goals-images img {
       width: 100%;
-      height: 180px;
+      height: 190px;
       object-fit: cover;
       display: block;
+      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .goals-card:hover .goals-images img {
+      transform: scale(1.05);
     }
     .goals-text {
-      padding: 28px 32px;
+      padding: 32px 36px;
     }
     .goals-text p {
       color: var(--text-muted);
-      font-size: 1.05rem;
+      font-size: 1.1rem;
+      line-height: 1.7;
     }
     .goals-text strong { color: var(--text); }
 
@@ -286,15 +370,21 @@
     .lang-list {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
     }
     .lang-tag {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 100px;
-      padding: 8px 16px;
-      font-size: 0.9rem;
+      padding: 10px 18px;
+      font-size: 0.92rem;
       font-weight: 500;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .lang-tag:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      background: var(--bg-card-hover);
     }
     .lang-tag.learning {
       border-style: dashed;
@@ -304,55 +394,61 @@
     /* CONTACT */
     .contact-links {
       display: flex;
-      gap: 14px;
+      gap: 16px;
       flex-wrap: wrap;
     }
     .contact-link {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px 22px;
+      border-radius: 14px;
+      padding: 18px 26px;
       text-decoration: none;
       color: var(--text);
       font-weight: 500;
-      transition: all 0.2s;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .contact-link:hover {
       background: var(--bg-card-hover);
       border-color: var(--accent);
-      transform: translateY(-2px);
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: 0 12px 30px rgba(124, 108, 255, 0.2);
     }
     .contact-link svg {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       fill: currentColor;
+      transition: transform 0.3s;
+    }
+    .contact-link:hover svg {
+      transform: scale(1.15);
     }
 
     footer {
-      padding: 40px 0;
+      padding: 50px 0;
       text-align: center;
       border-top: 1px solid var(--border);
       color: var(--text-muted);
-      font-size: 0.85rem;
+      font-size: 0.88rem;
     }
 
     @media (max-width: 640px) {
       .nav-links { display: none; }
-      .hero { padding: 120px 0 60px; }
-      section { padding: 50px 0; }
-      .about-card { padding: 24px; flex-direction: column; text-align: center; }
+      .hero { padding: 130px 0 70px; }
+      section { padding: 60px 0; }
+      .about-card { padding: 28px; flex-direction: column; text-align: center; }
       .goals-images { grid-template-columns: 1fr; }
-      .goals-images img { height: 150px; }
-      .goals-text { padding: 24px; }
+      .goals-images img { height: 160px; }
+      .goals-text { padding: 28px; }
+      .btn { padding: 12px 22px; }
     }
   </style>
 </head>
 <body>
 
-  <nav>
+  <nav id="navbar">
     <div class="container">
       <a href="#" class="logo">Victor<span>.</span></a>
       <ul class="nav-links">
@@ -379,9 +475,9 @@
 
   <section id="about">
     <div class="container">
-      <h2 class="section-title">About me</h2>
-      <p class="section-subtitle">Just a quick intro</p>
-      <div class="about-card">
+      <h2 class="section-title reveal">About me</h2>
+      <p class="section-subtitle reveal reveal-delay-1">Just a quick intro</p>
+      <div class="about-card reveal reveal-delay-2">
         <img src="images/cuba-flag.jpg" alt="Cuban flag" class="about-flag">
         <div class="about-text">
           <p>
@@ -399,14 +495,14 @@
 
   <section id="skills">
     <div class="container">
-      <h2 class="section-title">Skills</h2>
-      <p class="section-subtitle">What I'm working with</p>
+      <h2 class="section-title reveal">Skills</h2>
+      <p class="section-subtitle reveal reveal-delay-1">What I'm working with</p>
       <div class="skills-grid">
-        <div class="skill-item"><div class="name">Python</div></div>
-        <div class="skill-item"><div class="name">JavaScript</div></div>
-        <div class="skill-item"><div class="name">HTML</div></div>
-        <div class="skill-item"><div class="name">CSS</div></div>
-        <div class="skill-item">
+        <div class="skill-item reveal reveal-delay-1"><div class="name">Python</div></div>
+        <div class="skill-item reveal reveal-delay-2"><div class="name">JavaScript</div></div>
+        <div class="skill-item reveal reveal-delay-3"><div class="name">HTML</div></div>
+        <div class="skill-item reveal reveal-delay-1"><div class="name">CSS</div></div>
+        <div class="skill-item reveal reveal-delay-2">
           <div class="name">Luau</div>
           <div class="note">you know... the Roblox one</div>
         </div>
@@ -416,11 +512,11 @@
 
   <section id="interests">
     <div class="container">
-      <h2 class="section-title">Things I love</h2>
-      <p class="section-subtitle">Outside of the keyboard</p>
+      <h2 class="section-title reveal">Things I love</h2>
+      <p class="section-subtitle reveal reveal-delay-1">Outside of the keyboard</p>
       <div class="interests-grid">
 
-        <div class="interest-card">
+        <div class="interest-card reveal reveal-delay-1">
           <img src="images/nagatoro1.jpg" alt="Anime">
           <div class="content">
             <h3>Anime</h3>
@@ -428,7 +524,7 @@
           </div>
         </div>
 
-        <div class="interest-card">
+        <div class="interest-card reveal reveal-delay-2">
           <img src="images/baseball.jpg" alt="Baseball">
           <div class="content">
             <h3>Baseball</h3>
@@ -436,7 +532,7 @@
           </div>
         </div>
 
-        <div class="interest-card">
+        <div class="interest-card reveal reveal-delay-3">
           <img src="images/soccer.jpg" alt="Soccer">
           <div class="content">
             <h3>Soccer</h3>
@@ -444,7 +540,7 @@
           </div>
         </div>
 
-        <div class="interest-card">
+        <div class="interest-card reveal reveal-delay-4">
           <img src="images/beach.jpg" alt="Beach / Florida">
           <div class="content">
             <h3>Home vibes</h3>
@@ -458,9 +554,9 @@
 
   <section id="goals">
     <div class="container">
-      <h2 class="section-title">Future goals</h2>
-      <p class="section-subtitle">Where I'm headed</p>
-      <div class="goals-card">
+      <h2 class="section-title reveal">Future goals</h2>
+      <p class="section-subtitle reveal reveal-delay-1">Where I'm headed</p>
+      <div class="goals-card reveal reveal-delay-2">
         <div class="goals-images">
           <img src="images/space1.jpg" alt="Nebula">
           <img src="images/space2.jpg" alt="Pillars of Creation">
@@ -478,27 +574,27 @@
 
   <section id="languages">
     <div class="container">
-      <h2 class="section-title">Languages</h2>
-      <p class="section-subtitle">How I communicate</p>
+      <h2 class="section-title reveal">Languages</h2>
+      <p class="section-subtitle reveal reveal-delay-1">How I communicate</p>
       <div class="lang-list">
-        <span class="lang-tag">Spanish (native)</span>
-        <span class="lang-tag">English</span>
-        <span class="lang-tag learning">Portuguese (learning)</span>
-        <span class="lang-tag learning">Japanese (learning)</span>
+        <span class="lang-tag reveal reveal-delay-1">Spanish (native)</span>
+        <span class="lang-tag reveal reveal-delay-2">English</span>
+        <span class="lang-tag learning reveal reveal-delay-3">Portuguese (learning)</span>
+        <span class="lang-tag learning reveal reveal-delay-4">Japanese (learning)</span>
       </div>
     </div>
   </section>
 
   <section id="contact">
     <div class="container">
-      <h2 class="section-title">Let's connect</h2>
-      <p class="section-subtitle">Find me around the internet</p>
+      <h2 class="section-title reveal">Let's connect</h2>
+      <p class="section-subtitle reveal reveal-delay-1">Find me around the internet</p>
       <div class="contact-links">
-        <a href="https://github.com/Victorxd21" target="_blank" rel="noopener" class="contact-link">
+        <a href="https://github.com/Victorxd21" target="_blank" rel="noopener" class="contact-link reveal reveal-delay-1">
           <svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
           GitHub
         </a>
-        <a href="https://instagram.com/lwkjust.victor" target="_blank" rel="noopener" class="contact-link">
+        <a href="https://instagram.com/lwkjust.victor" target="_blank" rel="noopener" class="contact-link reveal reveal-delay-2">
           <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
           Instagram
         </a>
@@ -511,6 +607,36 @@
       <p>© 2026 Victor Alvarez · Built with love (and a bit of AI)</p>
     </div>
   </footer>
+
+  <script>
+    // Smooth scroll reveal (Apple-style)
+    const reveals = document.querySelectorAll('.reveal');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          // Optional: unobserve after animating once
+          // observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.12,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    reveals.forEach(el => observer.observe(el));
+
+    // Navbar border on scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 40) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+  </script>
 
 </body>
 </html>
