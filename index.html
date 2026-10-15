@@ -32,7 +32,6 @@
       transition: background 1.2s ease;
     }
 
-    /* Section morph background */
     body::before {
       content: '';
       position: fixed;
@@ -67,27 +66,18 @@
     .reveal-delay-3 { transition-delay: 0.3s; }
     .reveal-delay-4 { transition-delay: 0.4s; }
 
-    /* ===== STAGGERED HERO TITLE ===== */
-    .hero-title-word {
+    /* ===== TYPING CURSOR ===== */
+    .typing-cursor {
       display: inline-block;
-      opacity: 0;
-      transform: translateY(40px);
-      animation: wordIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-    @keyframes wordIn {
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ===== TYPING EFFECT ===== */
-    .typing {
-      border-right: 2px solid var(--accent);
-      white-space: nowrap;
-      overflow: hidden;
-      display: inline-block;
-      animation: blink 0.75s step-end infinite;
+      width: 3px;
+      height: 1.1em;
+      background: var(--accent);
+      margin-left: 2px;
+      vertical-align: text-bottom;
+      animation: blink 0.7s step-end infinite;
     }
     @keyframes blink {
-      50% { border-color: transparent; }
+      50% { opacity: 0; }
     }
 
     /* ===== NAV ===== */
@@ -170,11 +160,12 @@
     }
     .hero h1 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(2.6rem, 6.5vw, 4rem);
+      font-size: clamp(2.4rem, 6vw, 3.8rem);
       font-weight: 700;
       letter-spacing: -0.03em;
       margin-bottom: 16px;
-      line-height: 1.15;
+      line-height: 1.2;
+      min-height: 1.3em;
     }
     .hero h1 .gradient {
       background: linear-gradient(135deg, #7c6cff, #a78bfa);
@@ -195,7 +186,7 @@
       justify-content: center;
       flex-wrap: wrap;
       opacity: 0;
-      animation: fadeUp 0.8s 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation: fadeUp 0.8s 4.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     /* Magnetic buttons */
@@ -459,7 +450,6 @@
       .goals-images img { height: 160px; }
       .goals-text { padding: 28px; }
       .btn { padding: 12px 22px; }
-      .typing { white-space: normal; border: none; }
     }
   </style>
 </head>
@@ -481,8 +471,8 @@
   <header class="hero">
     <div class="container">
       <div class="hero-badge">Student · Web Dev · Future Astronomer</div>
-      <h1 id="hero-title"></h1>
-      <p class="subtitle"><span id="typing-text" class="typing"></span></p>
+      <h1 id="hero-title"><span id="typed-title"></span><span class="typing-cursor" id="title-cursor"></span></h1>
+      <p class="subtitle"><span id="typing-text"></span><span class="typing-cursor" id="sub-cursor" style="display:none"></span></p>
       <div class="hero-cta">
         <a href="#about" class="btn btn-primary magnetic">About me</a>
         <a href="#contact" class="btn btn-secondary magnetic">Get in touch</a>
@@ -626,37 +616,87 @@
   </footer>
 
   <script>
-    // ===== 1. STAGGERED HERO TITLE =====
-    const titleEl = document.getElementById('hero-title');
-    const titleText = "Hey, I'm Victor Alvarez";
-    const words = titleText.split(' ');
-    words.forEach((word, i) => {
-      const span = document.createElement('span');
-      span.className = 'hero-title-word';
-      span.style.animationDelay = (0.3 + i * 0.12) + 's';
-      if (word === 'Victor' || word === 'Alvarez') {
-        span.innerHTML = `<span class="gradient">${word}</span> `;
-      } else {
-        span.textContent = word + ' ';
-      }
-      titleEl.appendChild(span);
-    });
+    // ===== HERO TITLE: Type with typo + correction =====
+    const titleEl = document.getElementById('typed-title');
+    const titleCursor = document.getElementById('title-cursor');
 
-    // ===== 6. TYPING EFFECT =====
-    const typingEl = document.getElementById('typing-text');
-    const fullText = "A chill guy who really loves coding (and the universe)";
-    let charIndex = 0;
-    function type() {
-      if (charIndex < fullText.length) {
-        typingEl.textContent += fullText.charAt(charIndex);
-        charIndex++;
-        setTimeout(type, 38);
+    // Sequence: type correct → make typo → delete → fix → finish
+    const sequence = [
+      { text: "Hey, I'm Vict", delay: 70 },
+      { text: "Hey, I'm Victir", delay: 90 },          // typo
+      { text: "Hey, I'm Victi", delay: 50 },           // delete r
+      { text: "Hey, I'm Vict", delay: 50 },            // delete i
+      { text: "Hey, I'm Victor", delay: 80 },          // fix
+      { text: "Hey, I'm Victor Alvare", delay: 70 },
+      { text: "Hey, I'm Victor Alvarex", delay: 100 }, // another small typo
+      { text: "Hey, I'm Victor Alvare", delay: 60 },   // delete x
+      { text: "Hey, I'm Victor Alvarez", delay: 80 }   // final
+    ];
+
+    let step = 0;
+    let currentText = "";
+
+    function runTitleSequence() {
+      if (step >= sequence.length) {
+        // Finished – keep cursor blinking a bit then hide
+        setTimeout(() => {
+          titleCursor.style.display = 'none';
+          startSubtitle();
+        }, 900);
+        return;
+      }
+
+      const target = sequence[step].text;
+      const isDeleting = target.length < currentText.length;
+
+      if (isDeleting) {
+        currentText = currentText.slice(0, -1);
+        titleEl.innerHTML = formatTitle(currentText);
+        setTimeout(runTitleSequence, sequence[step].delay);
+      } else if (currentText.length < target.length) {
+        currentText = target.slice(0, currentText.length + 1);
+        titleEl.innerHTML = formatTitle(currentText);
+        setTimeout(runTitleSequence, sequence[step].delay);
       } else {
-        // remove cursor after finishing
-        setTimeout(() => typingEl.classList.remove('typing'), 1200);
+        // reached this step's text
+        step++;
+        setTimeout(runTitleSequence, isDeleting ? 40 : 280); // pause after typing a chunk
       }
     }
-    setTimeout(type, 1100);
+
+    function formatTitle(str) {
+      // Make "Victor Alvarez" gradient when it appears
+      if (str.includes("Victor Alvarez")) {
+        return str.replace("Victor Alvarez", '<span class="gradient">Victor Alvarez</span>');
+      }
+      if (str.includes("Victor")) {
+        return str.replace("Victor", '<span class="gradient">Victor</span>');
+      }
+      return str;
+    }
+
+    // Start title typing after a short delay
+    setTimeout(runTitleSequence, 600);
+
+    // ===== SUBTITLE typing (starts after title finishes) =====
+    function startSubtitle() {
+      const subEl = document.getElementById('typing-text');
+      const subCursor = document.getElementById('sub-cursor');
+      subCursor.style.display = 'inline-block';
+
+      const full = "A chill guy who really loves coding (and the universe)";
+      let i = 0;
+      function typeSub() {
+        if (i < full.length) {
+          subEl.textContent += full.charAt(i);
+          i++;
+          setTimeout(typeSub, 36);
+        } else {
+          setTimeout(() => subCursor.style.display = 'none', 1400);
+        }
+      }
+      typeSub();
+    }
 
     // ===== SCROLL REVEALS =====
     const reveals = document.querySelectorAll('.reveal');
@@ -673,7 +713,7 @@
       navbar.classList.toggle('scrolled', window.scrollY > 40);
     });
 
-    // ===== 4. MAGNETIC BUTTONS =====
+    // ===== MAGNETIC BUTTONS =====
     document.querySelectorAll('.magnetic').forEach(btn => {
       btn.addEventListener('mousemove', (e) => {
         const rect = btn.getBoundingClientRect();
@@ -686,7 +726,7 @@
       });
     });
 
-    // ===== 7. 3D TILT ON INTEREST CARDS =====
+    // ===== 3D TILT =====
     document.querySelectorAll('.tilt-card').forEach(card => {
       card.addEventListener('mousemove', (e) => {
         const rect = card.getBoundingClientRect();
@@ -703,7 +743,7 @@
       });
     });
 
-    // ===== 2. PARALLAX ON SPACE IMAGES =====
+    // ===== PARALLAX =====
     const parallaxImgs = document.querySelectorAll('.parallax-img');
     const goalsSection = document.getElementById('goals');
     window.addEventListener('scroll', () => {
@@ -717,7 +757,7 @@
       }
     });
 
-    // ===== 10. SECTION MORPH (background color shift) =====
+    // ===== SECTION MORPH =====
     const sections = document.querySelectorAll('section[data-morph]');
     const morphObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
